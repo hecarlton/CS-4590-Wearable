@@ -5,9 +5,9 @@ import org.jaudiolibs.beads.*;
 //Global Variables
 SamplePlayer sp, alert, ambient;
 ControlP5 p5;
-Button frequency, b1, b2, b3, b4, b5, b6;
+Button frequency, b1, b2, b3, b4, b5, b6, w1, w2, w3;
 Slider sl;
-WavePlayer wp;
+WavePlayer wp, wp1, wp2, wp3;
 
 //Get Ambient Sounds
 void getAmbientSound(String filepath) {
@@ -27,7 +27,7 @@ void getAlertSound(String filepath) {
 }
 
 void setup() {
-  size(320, 240);
+  size(640, 480);
   noStroke();
   
   //Instantiate Global Variables
@@ -65,14 +65,30 @@ void setup() {
          .setPosition(155,30)
          ;
          
+  w1 = p5.addButton("Frequency_1")
+        .setSize(60,35)
+        .setPosition(25, 120)
+        ;
+        
+  w2 = p5.addButton("Frequency_2")
+        .setSize(60,35)
+        .setPosition(90, 120)
+        ;
+
+  w3 = p5.addButton("Frequency_3")
+        .setSize(60,35)
+        .setPosition(155, 120)
+        ;
+         
   frequency = p5.addButton("Play Frequency")
-                .setPosition(75, 155)
+                .setPosition(75, 195)
                 .setSize(90, 35)
                 ;
   
   //Slider Setup
   sl = p5.addSlider("Frequency")
-         .setPosition(65, 125)
+         .setSize(180, 15)
+         .setPosition(25, 170)
          ;
          
   //Ambient and Alert Setup
@@ -80,6 +96,18 @@ void setup() {
   ambient.pause(true);
   sp = getSamplePlayer("piano2.wav");
   sp.pause(true);
+  
+  wp1 = new WavePlayer(ac, 440.0, Buffer.SINE);
+  wp1.pause(true);
+  ac.out.addInput(wp1);
+  
+  wp2 = new WavePlayer(ac, 660.0, Buffer.SINE);
+  wp2.pause(true);
+  ac.out.addInput(wp2);
+  
+  wp3 = new WavePlayer(ac, 880.0, Buffer.SINE);
+  wp3.pause(true);
+  ac.out.addInput(wp3);
          
   ac.start();
 }
@@ -88,6 +116,7 @@ void draw() {
  background(0); 
  loadAmbientEngine();
  loadAlertEngine();
+ loadFrequencies();
 }
 
 void loadAmbientEngine() {
@@ -109,6 +138,16 @@ void loadAlertEngine() {
      getAlertSound("piano3.wav");
   } else if (b3.isPressed() == true) {
      getAlertSound("piano5.wav"); 
+  }
+}
+
+void loadFrequencies() {
+  if (w1.isPressed() == true) {
+     wp1.pause(!wp1.isPaused());
+  } else if (w2.isPressed() == true) {
+     wp2.pause(!wp2.isPaused());
+  } else if (w3.isPressed() == true) {
+     wp3.pause(!wp3.isPaused());
   }
 }
 
